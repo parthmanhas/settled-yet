@@ -25,10 +25,12 @@ export default function Home() {
       {groups.map(({ id, name, members, expenses, settlementBalances }, index) => (
         <div key={id} className="flex flex-wrap items-center gap-4 px-5 sm:px-20 md:px-30">
           <Card className="bg-black text-white rounded-none border-white/10">
-            <CardHeader>
-              <CardTitle className="relative flex justify-between">
-                {name}
-                <Cross1Icon className="hover:cursor-pointer" onClick={() => removeGroup(id)} />
+            <CardHeader className="p-0">
+              <CardTitle className="relative flex items-center justify-between">
+                <div className="flex-1 h-[50px] flex items-center justify-center">
+                  {name}
+                </div>
+                <Cross1Icon className="hover:cursor-pointer absolute right-0 mr-2 p-1 box-content hover:bg-red-900 transition" onClick={() => removeGroup(id)} />
                 {
                   (
                     (settlementBalances.length > 0 && settlementBalances.every(balance => balance.settled))
@@ -40,9 +42,13 @@ export default function Home() {
                 }
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p>Members: {members.length}</p>
-              <p>Total Expense: {expenses.reduce((acc, curr) => acc + curr.amount, 0)}</p>
+            <CardContent className="flex p-0 h-[100px]">
+              <div className="flex-1 bg-neutral-800 flex items-center justify-center">
+                <p>Members: {members.length}</p>
+              </div>
+              <div className="flex-1 bg-neutral-700 flex items-center justify-center">
+                <p>Total Expense: {expenses.reduce((acc, curr) => acc + curr.amount, 0)}</p>
+              </div>
             </CardContent>
             <CardFooter className="flex flex-wrap p-0">
               <AddExpenseSheet groupId={id} />

@@ -54,7 +54,7 @@ export default function EditGroup({ groupId }: { groupId: string }) {
                 <Button className='sheet-button'>Edit Group</Button>
             </SheetTrigger>
             <SheetContent side="bottom" className="text-white/80 min-h-[60vh] px-5 overflow-auto bg-black max-w-lg m-auto border-2 border-white/50">
-                <SheetHeader>
+                <SheetHeader className='mb-5'>
                     <SheetTitle>Edit Group</SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-4">
