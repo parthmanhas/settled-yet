@@ -21,7 +21,7 @@ export type Transaction = {
 
 export type Expense = {
     desc: string;
-    paidBy: string;
+    paidBy: Member;
     amount: number;
     groupName: string;
 }

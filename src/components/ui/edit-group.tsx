@@ -3,92 +3,72 @@ import { v4 as uuidv4 } from 'uuid';
 import {
     Sheet,
     SheetContent,
-    SheetFooter,
-    SheetClose,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { Button } from "./button"
 import { Input } from "./input"
-import { Group, Groups } from "@/app/types"
-import { Dispatch, SetStateAction, useState } from "react"
-import { Cross1Icon } from "@radix-ui/react-icons"
+import { useStore } from '@/store/store';
+import { Cross1Icon } from '@radix-ui/react-icons';
 
 
-export default function EditGroup({ group, groups, setGroups }: { group: Group, groups: Groups, setGroups: Dispatch<SetStateAction<Groups>> }) {
+export default function EditGroup({ groupId }: { groupId: string }) {
 
-    const [updatedGroup, setupdatedGroup] = useState<Group>(group);
+    const addMember = useStore(state => state.addMember);
+    const updateGroupName = useStore(state => state.updateGroupName);
+    const deleteMember = useStore(state => state.deleteMember);
+    const updateMember = useStore(state => state.updateMember);
+    const removeEmptyMembers = useStore(state => state.removeEmptyMembers);
+    const groups = useStore(state => state.groups);
+    const group = groups.find(g => g.id === groupId);
 
-    const handleSubmit = () => {
-        if (updatedGroup.members.length < 2 || !Object.keys(updatedGroup).includes('name')) {
-            console.error('Cannot add group due to low members or name of group not included');
-            return;
-        }
-        const updatedGroups = [...groups.map(g => g.id === updatedGroup.id ? updatedGroup : g)];
-        setGroups(updatedGroups);
+    if (!group) {
+        console.error('Cannot find group');
+        return;
     }
 
-    const handleDeleteMemberInput = (id: string) => {
-        // setMemberInput([...memberInput.filter(inputId => inputId !== id)]);
-        // setupdatedGroup(Object.fromEntries(Object.entries(group).filter(([inputId, value]) => inputId !== id)));
-    }
-
-    const handleMemberInputChange = (e, id: string) => {
+    const handleMemberInputChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
         const updatedMember = { id, name: e.target.value };
-        let members = updatedGroup.members;
-        members = members.map(member => member.id === id ? updatedMember : member);
-        setupdatedGroup({ ...updatedGroup, members });
+        updateMember(group.id, updatedMember);
     }
 
-    const renderMemberInput = (id: string, memberName: string) => (
-        <div key={id} className="flex gap-2 items-center">
-            <Input value={memberName} onChange={(e) => handleMemberInputChange(e, id)} type="text" placeholder="Add Member Name" />
-            <Cross1Icon onClick={() => handleDeleteMemberInput(id)} />
-        </div>
-    );
-
-    const handleGroupNameChange = e => {
-        setupdatedGroup({ ...updatedGroup, name: e.target.value });
+    const handleDeleteMemberInput = (memberId: string) => {
+        deleteMember(group.id, memberId);
     }
 
-    const handleAddMember = (e) => {
-        const name = e.target.value;
+    const handleGroupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        updateGroupName(group.id, e.target.value);
+    }
+
+    const handleAddMember = () => {
+        const name = "";
         const id = uuidv4();
         const member = { id, name };
-        // setMemberInput([...memberInput, id])
-        setupdatedGroup({ ...updatedGroup, members: [...updatedGroup.members, member] });
+        addMember(group.id, member);
     }
 
     return (
-        <Sheet>
+        <Sheet onOpenChange={(open) => !open ? removeEmptyMembers(groupId) : null}>
             <SheetTrigger asChild>
-                <Button>Edit Group</Button>
+                <Button className='sheet-button'>Edit Group</Button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="text-white/80 min-h-[60vh] px-5 sm:px-20 lg:px-40 overflow-auto bg-black">
+            <SheetContent side="bottom" className="text-white/80 min-h-[60vh] px-5 overflow-auto bg-black max-w-lg m-auto border-2 border-white/50">
                 <SheetHeader>
                     <SheetTitle>Edit Group</SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-4">
-                    <Input value={updatedGroup.name} onChange={handleGroupNameChange} type="text" placeholder="Group Name" />
-                    <div className='flex flex-col gap-4 max-h-[250px] overflow-y-auto'>
-                        {/* {memberInput.map((id) => <div key={id}>{renderMemberInput(id)}</div>)} */}
-                        {updatedGroup.members.map((member) => (
-                            renderMemberInput(member.id, member.name)
+                    <Input value={group.name} onChange={handleGroupNameChange} type="text" placeholder="Group Name" />
+                    <div className='flex flex-col gap-4 max-h-[230px] overflow-y-auto scrollbar'>
+                        {group.members.map(({ id, name }) => (
+                            <div key={id} className="flex gap-2 items-center last:mb-5">
+                                <Input value={name} onChange={e => handleMemberInputChange(e, id)} type="text" placeholder="Add Member Name" />
+                                <Cross1Icon className='mr-2 hover:cursor-pointer' onClick={() => handleDeleteMemberInput(id)} />
+                            </div>
                         ))}
                     </div>
                     <Button onClick={handleAddMember} type="button">Add Another Member</Button>
                 </div>
-                <SheetFooter>
-                    <SheetClose asChild>
-                        <div className='flex flex-col w-full'>
-                            {/* <Button disabled={memberInput.length > 2} onClick={handleSubmit} className="mt-5" type="submit">Save Group</Button> */}
-                            <Button onClick={handleSubmit} className="mt-5" type="submit">Save Group</Button>
-                            {/* {memberInput.length < 2 && <p className='text-red-600 text-center'>Minimum members should be 2</p>} */}
-                            {Object.keys(updatedGroup).length <= 2 && <p className='text-red-600 text-center'>Minimum members should be 2</p>}
-                        </div>
-                    </SheetClose>
-                </SheetFooter>
             </SheetContent>
         </Sheet>
 

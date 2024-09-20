@@ -1,59 +1,61 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { CreateGroupSheet } from "@/components/ui/create-group-sheet";
-import { ExpenseSheet } from "@/components/ui/expense-sheet";
-import { useEffect, useState } from "react";
-import { Expenses, Groups, Transaction } from "./types";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { useStore } from "@/store/store";
+import { AddExpenseSheet } from "@/components/ui/add-expense-sheet";
 import ViewBalances from "@/components/ui/view-balance-sheet";
 import EditGroup from "@/components/ui/edit-group";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
-// import { useState } from "react";
+import Image from "next/image";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import ViewExpenseSheet from "@/components/ui/view-expense-sheet";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
 
-  // const [people, setPeople] = useState([]);
-  const [groups, setGroups] = useState<Groups>([]);
-
-  // useEffect(() => {
-  //   let balanceUpdatedGroups = groups.map(group => ({...group, settlementBalances: calculateBalances(group.expenses)}))
-  //   setGroups(balanceUpdatedGroups);
-  // }, [groups]);
+  const groups = useStore(state => state.groups);
+  const deleteAllGroups = useStore(state => state.deleteAllGroups);
+  const removeGroup = useStore(state => state.removeGroup);
 
   return (
-    <main className="max-w-[1200px] p-5 flex flex-col items-center gap-4 text-white/80 relative">
-      <div className="flex flex-col gap-2 text-justify px-5 sm:px-20 md:px-40">
-        <p className="text-center text-5xl">Settled yet ?</p>
-        <p>Settled app is like having a financial referee for group outings—it makes sure everyone pays their fair share without turning dinner into a math exam. Just input the total, assign who ordered what (or split evenly if you’re all equally broke), and voilà! The app does the math so you can keep the peace. Some even track IOUs or let you settle up on the spot. No more awkward Venmo requests—just fairness served with a side of ease!</p>
+    <main className="max-w-[1200px] p-5 flex flex-col items-center gap-4 text-white/80 m-auto lg:text-xl">
+      <div className="flex flex-col gap-2 text-justify px-5 sm:px-20 md:px-30">
+        <p className="text-center text-5xl">Settled, yet ?</p>
+        <p>Settled is alternative to splitwise, I think. If you don't, please tell me how it can be improved</p>
       </div>
-      {groups.map((group, index) => (
-        <div key={index} className="flex flex-wrap items-center gap-4 px-5 sm:px-20 md:px-40">
-          <Card className="bg-black text-white">
+      {groups.map(({ id, name, members, expenses, settlementBalances }, index) => (
+        <div key={id} className="flex flex-wrap items-center gap-4 px-5 sm:px-20 md:px-30">
+          <Card className="bg-black text-white rounded-none border-white/10">
             <CardHeader>
-              <CardTitle>{group.name}</CardTitle>
+              <CardTitle className="relative flex justify-between">
+                {name}
+                <Cross1Icon className="hover:cursor-pointer" onClick={() => removeGroup(id)} />
+                {
+                  (
+                    (settlementBalances.length > 0 && settlementBalances.every(balance => balance.settled))
+                    ||
+                    (expenses.length > 0 && settlementBalances.length === 0)
+                  )
+                  &&
+                  <Image className="absolute top-0 right-5 -rotate-12" src="/settled.png" alt="" width={100} height={100} />
+                }
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <p>Members: {group.members.length}</p>
-              <p>Total Expense: {group.expenses.reduce((acc, curr) => acc + curr.amount, 0)}</p>
+              <p>Members: {members.length}</p>
+              <p>Total Expense: {expenses.reduce((acc, curr) => acc + curr.amount, 0)}</p>
             </CardContent>
-            <CardFooter className="flex flex-wrap gap-2">
-              <ExpenseSheet
-                group={group}
-                groups={groups}
-                setGroups={setGroups}
-              />
-              <ViewBalances group={group} groups={groups} setGroups={setGroups} />
-              <EditGroup group={group} groups={groups} setGroups={setGroups} />
+            <CardFooter className="flex flex-wrap p-0">
+              <AddExpenseSheet groupId={id} />
+              <ViewExpenseSheet groupId={id} />
+              <ViewBalances groupId={id} />
+              <EditGroup groupId={id} />
             </CardFooter>
           </Card>
         </div>
       ))}
 
-      <CreateGroupSheet setGroups={setGroups} groups={groups} />
-      {/* <ExpenseSheet /> */}
-      <Button onClick={() => toast({
-        title: "Expense Added"
-      })}>Toast</Button>
+      <CreateGroupSheet />
+      {groups.length > 1 && <Button onClick={() => deleteAllGroups()}>Delete All Groups</Button>}
     </main>
   );
 }

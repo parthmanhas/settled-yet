@@ -22,7 +22,7 @@ export function AdjustSplitSheet() {
             <SheetTrigger asChild>
                 <Button>equally</Button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="text-white/80 min-h-[60vh] bg-black lg:px-40">
+            <SheetContent side="bottom" className="text-white/80 min-h-[60vh] bg-black lg:px-30">
                 <SheetHeader>
                     <SheetTitle>Adjust Split</SheetTitle>
                     <Tabs defaultValue="equally">
