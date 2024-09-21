@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import ViewExpenseSheet from "@/components/ui/view-expense-sheet";
 import { Button } from "@/components/ui/button";
+import { ImproveDialog } from "@/components/ui/improve-dialog";
 
 export default function Home() {
 
@@ -18,9 +19,9 @@ export default function Home() {
 
   return (
     <main className="max-w-[1200px] p-5 flex flex-col items-center gap-4 text-white/80 m-auto lg:text-xl">
-      <div className="flex flex-col gap-2 text-justify px-5 sm:px-20 md:px-30">
+      <div className="flex flex-col gap-2 text-justify px-5 sm:px-20 md:px-30 mb-5">
         <p className="text-center text-5xl">Settled, yet ?</p>
-        <p>Settled is alternative to splitwise, I think. If you don't, please tell me how it can be improved</p>
+        <p>Settled is alternative to splitwise, I think. If you don't, please tell me how it can be <span><ImproveDialog /></span></p>
       </div>
       {groups.map(({ id, name, members, expenses, settlementBalances }, index) => (
         <div key={id} className="flex flex-wrap items-center gap-4 px-5 sm:px-20 md:px-30">
