@@ -10,6 +10,7 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import ViewExpenseSheet from "@/components/ui/view-expense-sheet";
 import { Button } from "@/components/ui/button";
 import { ImproveDialog } from "@/components/ui/improve-dialog";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
 
@@ -25,7 +26,7 @@ export default function Home() {
       </div>
       {groups.map(({ id, name, members, expenses, settlementBalances }) => (
         <div key={id} className="flex flex-wrap items-center gap-4 px-5 sm:px-20 md:px-30">
-          <Card className="bg-black text-white rounded-none border-white/10">
+          <Card className="bg-black text-white rounded-none border-white/10 min-w-[290px]">
             <CardHeader className="p-0">
               <CardTitle className="relative flex items-center justify-between">
                 <div className="flex-1 h-[50px] flex items-center justify-center">
@@ -39,19 +40,32 @@ export default function Home() {
                     (expenses.length > 0 && settlementBalances.length === 0)
                   )
                   &&
-                  <Image className="absolute top-0 right-5 -rotate-12" src="/settled.png" alt="" width={100} height={100} />
+                  <Image className="absolute top-[112.5px] sm:top-[50px] right-[calc(50%-37.5px)] w-[75px] h-[75px]" src="/settled.png" alt="" width={100} height={100} />
                 }
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex p-0 h-[100px]">
-              <div className="flex-1 bg-neutral-800 flex items-center justify-center">
+            <CardContent className="flex flex-col sm:flex-row p-0 h-[200px] sm:h-[100px]">
+              {/* <div className="flex-1 bg-neutral-800 flex items-center justify-center"> */}
+              <div className={cn(
+                {
+                  "flex-1 bg-neutral-600 flex items-center justify-center": true,
+                  "flex-1 bg-emerald-950 flex items-center justify-center": (settlementBalances.length > 0 && settlementBalances.every(balance => balance.settled))
+                    ||
+                    (expenses.length > 0 && settlementBalances.length === 0)
+                }
+              )}>
                 <p>Members: {members.length}</p>
               </div>
-              <div className="flex-1 bg-neutral-700 flex items-center justify-center">
+              <div className={cn({
+                "flex-1 bg-neutral-700 flex items-center justify-center": true,
+                "flex-1 bg-emerald-950 flex items-center justify-center": (settlementBalances.length > 0 && settlementBalances.every(balance => balance.settled))
+                  ||
+                  (expenses.length > 0 && settlementBalances.length === 0)
+              })}>
                 <p>Total Expense: {expenses.reduce((acc, curr) => acc + curr.amount, 0)}</p>
               </div>
             </CardContent>
-            <CardFooter className="flex flex-wrap p-0">
+            <CardFooter className="grid sm:flex p-0">
               <AddExpenseSheet groupId={id} />
               <ViewExpenseSheet groupId={id} />
               <ViewBalances groupId={id} />
