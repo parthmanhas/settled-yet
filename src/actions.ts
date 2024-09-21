@@ -11,7 +11,7 @@ export const submitForm = async (form: FormData) => {
         message: "Settled App: " + form.get("message") as string
     }
     try {
-        const { data, error } = await resend.emails.send({
+        const { error } = await resend.emails.send({
             from: 'Settled App <settled@parthmanhas.com>',
             to: ['parthmanhas@gmail.com'],
             subject: 'From Settled App',

@@ -1,7 +1,7 @@
 
 "use client";
 import { Button } from "./button"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./dialog"
 import { Textarea } from "./textarea"
 import { LoaderIcon } from "lucide-react";
 import { useState } from "react";
