@@ -9,8 +9,8 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { WhoPaidSheet } from "./who-paid-sheet"
-import { Expense, Expenses, Group, Groups, Member, Transaction } from "@/app/types"
-import React, { Dispatch, SetStateAction, useState } from "react"
+import { Expense, Expenses, Group, Member, Transaction } from "@/app/types"
+import React, { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { useStore } from '@/store/store';
 
@@ -59,7 +59,7 @@ const calculateBalances = (members: Member[], expenses: Expenses): Transaction[]
         const creditor = creditors[j];
 
         // Pay the minimum between what debtor owes and what creditor is owed
-        let amountToPay = Math.min(Math.abs(debtor.totalPaid), creditor.totalPaid);
+        const amountToPay = Math.min(Math.abs(debtor.totalPaid), creditor.totalPaid);
 
         transactions.push({
             id: uuidv4(),
@@ -86,17 +86,17 @@ export function AddExpenseSheet({ groupId }: { groupId: string }) {
     const updateGroup = useStore(state => state.updateGroup);
     const groups = useStore(state => state.groups);
     const group = groups.find(g => g.id === groupId);
-    if (!group) {
-        console.error('Cannot find group');
-        return;
-    }
-
+    
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState(0);
     const [paidBy, setPaidBy] = useState<Member>();
     const [error, setError] = useState('');
     const { toast } = useToast();
-
+    
+    if (!group) {
+        console.error('Cannot find group');
+        return;
+    }
     const handleSaveChanges = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (description === '') {
             e.preventDefault();

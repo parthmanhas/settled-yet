@@ -11,8 +11,8 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import React, { Dispatch, SetStateAction, useState } from "react"
-import { Group, Groups } from '@/app/types';
+import React, { useState } from "react"
+import { Group } from '@/app/types';
 import { useStore } from '@/store/store';
 import { Cross1Icon } from '@radix-ui/react-icons';
 
@@ -58,7 +58,7 @@ export function CreateGroupSheet() {
         setGroup({ ...group, name: e.target.value });
     }
 
-    const handleAddMember = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleAddMember = () => {
         const name = "";
         const id = uuidv4();
         const member = { id, name };

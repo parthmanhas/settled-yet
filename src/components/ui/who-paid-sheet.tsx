@@ -10,7 +10,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction } from "react"
 import { Group, Member } from "@/app/types";
 import { RadioGroup, RadioGroupItem } from "./radio-group";
 import { Label } from "./label";

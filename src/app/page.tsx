@@ -1,6 +1,6 @@
 "use client";
 import { CreateGroupSheet } from "@/components/ui/create-group-sheet";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { useStore } from "@/store/store";
 import { AddExpenseSheet } from "@/components/ui/add-expense-sheet";
 import ViewBalances from "@/components/ui/view-balance-sheet";
@@ -21,9 +21,9 @@ export default function Home() {
     <main className="max-w-[1200px] p-5 flex flex-col items-center gap-4 text-white/80 m-auto lg:text-xl">
       <div className="flex flex-col gap-2 text-justify px-5 sm:px-20 md:px-30 mb-5">
         <p className="text-center text-5xl">Settled, yet ?</p>
-        <p>Settled is alternative to splitwise, I think. If you don't, please tell me how it can be <span><ImproveDialog /></span></p>
+        <p>Settled is alternative to splitwise, I think. If you don&apos;t, please tell me how it can be <span><ImproveDialog /></span></p>
       </div>
-      {groups.map(({ id, name, members, expenses, settlementBalances }, index) => (
+      {groups.map(({ id, name, members, expenses, settlementBalances }) => (
         <div key={id} className="flex flex-wrap items-center gap-4 px-5 sm:px-20 md:px-30">
           <Card className="bg-black text-white rounded-none border-white/10">
             <CardHeader className="p-0">

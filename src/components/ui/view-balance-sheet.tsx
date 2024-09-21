@@ -1,4 +1,4 @@
-import { Group, Groups } from "@/app/types"
+import { Group } from "@/app/types"
 import {
     Table,
     TableBody,
@@ -16,7 +16,7 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { Checkbox } from "./checkbox"
-import React, { Dispatch, SetStateAction } from "react"
+import React from "react"
 import { useStore } from "@/store/store"
 import { CheckedState } from "@radix-ui/react-checkbox"
 

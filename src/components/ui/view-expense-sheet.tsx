@@ -14,7 +14,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import React, { Dispatch, SetStateAction } from "react"
+import React from "react"
 import { useStore } from "@/store/store"
 
 export default function ViewExpenseSheet({ groupId }: { groupId: string }) {
